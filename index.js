@@ -1,3 +1,10 @@
+/** 
+ * @param {HTMLTableCellElement} table
+ * @param {*} column
+ * @param {*} asc
+*/
+
+
 document.addEventListener('DOMContentLoaded', () => {
 
     var json = [{"disaster_id":"DIS008","agency_id":"NDMA001","disaster_type_id":"Earthquake","status_id":"Fulfilled","severity_id":"Mild","start_date":"30-05-2023","location":"Disaster in DKI Jakarta","affected_population":500,"fatalities":1000,"longitude":"106.8270488","latitude":"-6.175247","country_id":"ID","postal_code":"12345","state_province_id":"DKI Jakarta","city_id":"Jakarta"}
@@ -79,5 +86,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 table.innerHTML += row
         }
     }
+
+    function sortTableByColumn(table, column, asc = true){
+        const dirModifier = asc ? 1 : -1;
+        const tBody = table.tBodies[0];
+        const rows = Array.from(tBody.querySelectorAll("tr"));
+
+        const sortedRows = rows.sort((a,b) =>{
+            const aColText = a.querySelector(`td:nth-child(${column + 1})`).textContext.trim();
+            const bColText = b.querySelector(`td:nth-child(${column + 1})`).textContext.trim();
+
+            return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+        });
+
+        while(tBody.firstChild){
+            tBody.removeChild(tBody.firstChild);
+        }
+
+        tBody.append(...sortedRows);
+    
+    }
+
+    sortTableByColumn(document.querySelector("table"), 7, false);
 
 })
